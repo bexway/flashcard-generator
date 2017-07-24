@@ -1,8 +1,8 @@
 // https://css-tricks.com/understanding-javascript-constructors/
 
 function BasicCard(front, back) {
-  if (!(this instanceof ClozeCard)) {
-    return new Book(name, year);
+  if (!(this instanceof BasicCard)) {
+    return new BasicCard(front, back);
   }
   this.front = front;
   this.back = back;

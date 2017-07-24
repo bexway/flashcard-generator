@@ -1,53 +1,33 @@
-// var ClozeCard = function(){
-//
-// };
-//
-// //
-
 // https://css-tricks.com/understanding-javascript-constructors/
 
 function ClozeCard(text, cloze) {
   if (!(this instanceof ClozeCard)) {
-    return new Book(name, year);
+    return new ClozeCard(text, cloze);
   }
   this.fullText = text;
-  // this.cloze = cloze;
-  var re = new RegExp(cloze, 'g');
-  console.log(re);
-
-  // var match = re.exec(this.fullText);
-  var match, matches = [];
-  // console.log(match);
-  while ((match = re.exec(this.fullText))) {
-    matches.push(match.index);
+  this.cloze = cloze;
+  // this.partial = this.getPartialText();
+  try {
+    this.partial = this.getPartialText();
+  } catch (e) {
+    console.log(e.name + ': ' + e.message);
+    this.fullText = null;
+    this.cloze = null;
+    this.partial = null;
   }
-  console.log(matches);
-  // https://stackoverflow.com/questions/3410464/how-to-find-indices-of-all-occurrences-of-one-string-in-another-in-javascript
 }
-
-ClozeCard.prototype.getClozeMatches = function(searchStr, str, caseSensitive) {
-  var searchStrLen = searchStr.length;
-  if (!searchStrLen) {
-      return [];
+  // https://stackoverflow.com/questions/3410464/how-to-find-indices-of-all-occurrences-of-one-string-in-another-in-javascript
+ClozeCard.prototype.getPartialText = function() {
+  // Create a new regex, global so it finds all instances of the cloze
+  var re = new RegExp(this.cloze, 'g');
+  var match, matches = [];
+  // If no match is found, throw an error
+  if(!re.exec(this.fullText)){
+    throw new Error("Cloze not found in text");
   }
-  var startIndex = 0, index, indices = [];
-  if (!caseSensitive) {
-      str = str.toLowerCase();
-      searchStr = searchStr.toLowerCase();
-  }
-  while ((index = str.indexOf(searchStr, startIndex)) > -1) {
-      indices.push(index);
-      startIndex = index + searchStrLen;
-  }
-  return indices;
+  return this.fullText.replace(re, "___");
 };
 
-//
-// var person1 = new Book("js book", 2014);
-// var person2 = Book("js book", 2014);
-// console.log(person1);    // true
-// console.log(person2);    // true
-
-new ClozeCard("I think George Washington is George Washington", "g");
+// new ClozeCard("I think George Washington is George Washington", "George");
 
 module.exports = ClozeCard;
