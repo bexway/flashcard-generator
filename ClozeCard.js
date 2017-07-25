@@ -6,7 +6,6 @@ function ClozeCard(text, cloze) {
   }
   this.fullText = text;
   this.cloze = cloze;
-  // this.partial = this.getPartialText();
   try {
     this.partial = this.getPartialText();
   } catch (e) {
@@ -20,14 +19,12 @@ function ClozeCard(text, cloze) {
 ClozeCard.prototype.getPartialText = function() {
   // Create a new regex, global so it finds all instances of the cloze
   var re = new RegExp(this.cloze, 'g');
-  var match, matches = [];
   // If no match is found, throw an error
   if(!re.exec(this.fullText)){
     throw new Error("Cloze not found in text");
   }
+  // otherwise, replace every instance of the cloze with a blank
   return this.fullText.replace(re, "___");
 };
-
-// new ClozeCard("I think George Washington is George Washington", "George");
 
 module.exports = ClozeCard;
